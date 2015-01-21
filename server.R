@@ -1,6 +1,8 @@
 library(shiny)
 library(rCharts)
 library(caret)
+library(e1071)
+library(randomForest)
 
 inTrain <- createDataPartition(y = iris$Species,
                                p = 0.7,
@@ -71,25 +73,38 @@ shinyServer(
                       return(newDF)
                 })
                 
-                #output$testVal <- renderText({ dim(xSet()) })
-                output$testVal <- renderText({ dim(modPredict()) })
-                
                 output$plot2 <- renderChart2({
-                        ModP <- modPredict()
-                        h2 <- hPlot(y = input$yaxis2,
-                                    x = input$xaxis2,
-                                    data = ModP,
-                                    type = "scatter",
-                                    group = "Prediction"
-                                    )
-                        falseGroup <- ModP[which(ModP$Species != ModP$Prediction), ]
-                        h2$data(y = falseGroup[, input$yaxis2],
-                                x = falseGroup[, input$xaxis2],
-                                type = "scatter",
-                                name = "False Predictions")
-                        h2$plotOptions(series = list(marker = list(symbol = "circle", radius = 6)))
-                        h2$chart(width = 400)
-                        h2
+                        if(length(input$coVars) >=2){
+                                ModP <- modPredict()
+                                h2 <- hPlot(y = input$yaxis2,
+                                        x = input$xaxis2,
+                                        data = ModP,
+                                        type = "scatter",
+                                        group = "Prediction"
+                                        )
+                                falseGroup <- ModP[which(ModP$Species != ModP$Prediction), ]
+                                h2$data(y = falseGroup[, input$yaxis2],
+                                        x = falseGroup[, input$xaxis2],
+                                        type = "scatter",
+                                        name = "False Predictions")
+                                h2$plotOptions(series = list(marker = list(symbol = "circle", radius = 6)))
+                                h2$chart(width = 400)
+                                return(h2)}
+                        h2 <- Highcharts$new()
+                        return(h2)
+                })
+                
+                output$view <- renderTable({
+                        if(length(input$coVars) >=2){
+                                return(table(modPredict()[,"Species"], modPredict()[,"Prediction"]))
+                        }
+                        return(NULL)
+                })
+                
+                output$warnMsg <- renderText({
+                        if(length(input$coVars) < 2){
+                                '<b style="color:red">Please choose at least two covariates</b>'
+                        }
                 })
 
         }
