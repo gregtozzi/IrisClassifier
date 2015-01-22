@@ -13,7 +13,7 @@ shinyUI(fluidPage(theme = "css/cosmo.css",
         
         fluidRow(
                  column(6,
-                        p("Your goal is to identify the species of irises properly based on their physical measurements. This app will provide you with access to two methods to do just this - regression trees and random forests. Follow the step-by-step directions below to select a training set, build a machine learning model, and test that model against the remaining data."))),
+                        p("Your goal is to identify species of irises based on physical measurements. This app provides access to two methods of solving this classification problem: random forests and regression trees. Follow the step-by-step directions below to select a training set, build a machine learning model, and apply the model to the test set."))),
         
         fluidRow(
                 column(12,
@@ -81,7 +81,7 @@ shinyUI(fluidPage(theme = "css/cosmo.css",
                                    selected = names(iris[1])),
                        uiOutput("uiy2"),
                        tableOutput("view"),
-                       p("Additionally, the table gives a detailed breakdown of the model's performance.")),
+                       p("The table gives a detailed breakdown of the model's performance.")),
                 column(6,
                        showOutput("plot2", "highcharts")))
         
