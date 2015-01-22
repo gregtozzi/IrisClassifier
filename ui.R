@@ -1,8 +1,9 @@
 library(shiny)
 library(rCharts)
-data(iris)
 
-shinyUI(fluidPage(theme = "css/cosmo.css",
+#shinyUI(fluidPage(theme = "css/cosmo.css",
+
+shinyUI(fluidPage(
         
         # Application title
         titlePanel("Iris Classifier"),
